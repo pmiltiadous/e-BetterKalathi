@@ -525,8 +525,7 @@ header {
 /* Padding for spacing above footer */
 body>.container,
 .products-section,
-.hero,
-.categories {
+.hero {
     padding-bottom: 5rem;
 }
 
