@@ -230,7 +230,7 @@ async function checkout () {
 async function loadTowns () {
   const select = document.getElementById('cart-town')
   try {
-    const response = await fetch('http://localhost:8000/regions/')
+    const response = await fetch('/regions/')
     const regions = await response.json()
 
     if (!regions?.regions?.length) {
