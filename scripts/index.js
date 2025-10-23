@@ -208,6 +208,8 @@ async function checkout () {
     showToast('warning', 'Please select a town!')
     return
   }
+  
+  document.getElementById('loader').style.display = 'flex'
 
   try {
     const response = await fetch('/checkout/', {
