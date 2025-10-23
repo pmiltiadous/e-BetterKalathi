@@ -175,10 +175,6 @@ function updateCart (actionType = null, itemName = '') {
     `
     )
     .join('')
-
-  if (actionType === 'add') showToast('success', `${itemName} added to cart`)
-  if (actionType === 'remove')
-    showToast('warning', `${itemName} removed from cart`)
 }
 
 function toggleCart () {
@@ -208,7 +204,7 @@ async function checkout () {
     showToast('warning', 'Please select a town!')
     return
   }
-  
+
   document.getElementById('loader').style.display = 'flex'
 
   try {
@@ -249,16 +245,4 @@ async function loadTowns () {
     console.error('Failed to load towns:', err)
     select.innerHTML = '<option value="">Failed to load towns</option>'
   }
-}
-
-function showToast (icon, title) {
-  Swal.fire({
-    toast: true,
-    position: 'top-end',
-    icon,
-    title,
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true
-  })
 }

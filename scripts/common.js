@@ -5,6 +5,7 @@ function showToast (type = 'info', message = '', duration = 2000) {
     icon: type,
     title: message,
     showConfirmButton: false,
+    showCloseButton: true,
     timer: duration,
     timerProgressBar: true,
     background: '#fff',
@@ -23,10 +24,6 @@ function showToast (type = 'info', message = '', duration = 2000) {
     padding: '0.75rem 1rem',
     customClass: {
       popup: 'shadow-lg rounded-md'
-    },
-    didOpen: toast => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
   })
 }
