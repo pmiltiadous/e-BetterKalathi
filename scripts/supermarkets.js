@@ -12,7 +12,7 @@ async function fetchSupermarkets () {
   }
 
   try {
-    const response = await fetch('http://localhost:8000/checkout/', {
+    const response = await fetch('/checkout/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ town, cart })
