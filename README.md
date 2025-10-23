@@ -20,8 +20,8 @@ e-BetterKalathi allows users to create a basket of products and compare supermar
 - **API:** E-Kalathi
 
 ## Installation
-1. **Clone the repository**
 ```bash
+1. **Clone the repository**
 git clone https://github.com/pmiltiadous/e-BetterKalathi.git
 cd e-BetterKalathi
 
