@@ -24,3 +24,16 @@ e-BetterKalathi allows users to create a basket of products and compare supermar
 ```bash
 git clone https://github.com/pmiltiadous/e-BetterKalathi.git
 cd e-BetterKalathi
+
+2. **Create a virtual environment**
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+3. **Install dependencies**
+pip install -r requirements.txt
+
+4. **Run the app**
+uvicorn main:app --reload
+
+
