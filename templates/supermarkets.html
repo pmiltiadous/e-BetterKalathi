@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermarket Prices</title>
+    <link rel="stylesheet" href="{{ url_for('styles', path='/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('styles', path='/supermarkets.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo"><span>e-BetterKalathi</span></div>
+                <a href="/" class="back-btn">← Back to Cart</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container products-section">
+        <div class="main-container" style="display:flex; gap:1rem;">
+            <!-- Supermarket list -->
+            <div class="supermarkets-container" style="flex:2;">
+                <table class="supermarkets-table" id="supermarket-list">
+                    <thead>
+                        <tr>
+                            <th>Supermarket</th>
+                            <th id="price-header">Total Price <span class="sort-indicator">↑</span></th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="{{ url_for('scripts', path='supermarkets.js') }}"></script>
+</body>
+
+</html>
