@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('styles', path='/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('styles', path='/supermarkets.css') }}">
 </head>
-
 <body>
     <header>
         <div class="container">
@@ -20,9 +18,9 @@
     </header>
 
     <main class="container products-section">
-        <div class="main-container" style="display:flex; gap:1rem;">
-            <!-- Supermarket list -->
-            <div class="supermarkets-container" style="flex:2;">
+        <div class="main-layout-wrapper">
+            <!-- Supermarket list container -->
+            <div class="supermarkets-container" style="width: 100%;">
                 <table class="supermarkets-table" id="supermarket-list">
                     <thead>
                         <tr>
@@ -33,16 +31,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="3">Loading...</td>
+                            <td colspan="3" style="text-align: center; padding: 2rem;">Loading supermarkets...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
         </div>
     </main>
 
     <script src="{{ url_for('scripts', path='supermarkets.js') }}"></script>
 </body>
-
 </html>

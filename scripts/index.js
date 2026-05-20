@@ -3,6 +3,8 @@ let cart = []
 let categories = ['All']
 let selectedCategory = 'All'
 let searchQuery = ''
+let currentPage = 1;
+const itemsPerPage = 8;
 
 const savedCart = localStorage.getItem('cart')
 if (savedCart) cart = JSON.parse(savedCart)
@@ -42,71 +44,145 @@ function selectCategory (category) {
   selectedCategory = category
   document.getElementById('product-search').value = ''
   searchQuery = ''
+  currentPage = 1; // Reset pagination back to page 1 on category change
   renderCategories()
   renderProducts()
 }
 
 function searchProducts (query) {
   searchQuery = query.toLowerCase()
+  currentPage = 1; // Reset pagination back to page 1 when user types a search
   renderProducts()
 }
 
-function renderProducts () {
-  const filtered = products.filter(p => {
-    const categoryMatch =
-      selectedCategory === 'All' ||
-      (p.productCategoryNameEnglish &&
-        p.productCategoryNameEnglish.toLowerCase() ===
-          selectedCategory.toLowerCase()) ||
-      (p.productCategoryName &&
-        p.productCategoryName.toLowerCase() === selectedCategory.toLowerCase())
+function renderProducts() {
+    const grid = document.getElementById('products-grid');
+    const paginationControls = document.getElementById('pagination-controls');
+    const countDisplay = document.getElementById('product-count');
 
-    const searchMatch =
-      !searchQuery ||
-      (p.name && p.name.toLowerCase().includes(searchQuery)) ||
-      (p.productCategoryNameEnglish &&
-        p.productCategoryNameEnglish.toLowerCase().includes(searchQuery)) ||
-      (p.productCategoryName &&
-        p.productCategoryName.toLowerCase().includes(searchQuery)) ||
-      (p.brand && p.brand.toLowerCase().includes(searchQuery))
+    // 1. CALCULATE FILTERED ARRAY LOCALLY FROM GLOBAL STATES
+    const filtered = products.filter(p => {
+        const matchesCategory = selectedCategory === 'All' || p.productCategoryNameEnglish === selectedCategory;
+        const matchesSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+    });
 
-    return categoryMatch && searchMatch
-  })
+    // Update the live product counters
+    if (countDisplay) {
+        countDisplay.textContent = `${filtered.length} products available`;
+    }
 
-  document.getElementById('section-title').textContent =
-    selectedCategory === 'All' ? 'All Products' : selectedCategory
-  document.getElementById(
-    'product-count'
-  ).textContent = `${filtered.length} products available`
+    // Safety check if no elements match search/filter
+    if (!filtered || !filtered.length) {
+        grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">No products found</p>';
+        if (paginationControls) paginationControls.innerHTML = ''; 
+        return;
+    }
 
-  const grid = document.getElementById('products-grid')
-  if (!filtered.length) {
-    grid.innerHTML =
-      '<p style="grid-column:1/-1; text-align:center;">No products found</p>'
-    return
-  }
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  grid.innerHTML = filtered
-    .map(
-      p => `
-      <div class="product-card">
-          <img src="${p.productThumbnailUrl}" alt="${
-        p.name
-      }" class="product-image">
-          <div class="product-info">
-              <div class="product-category">${
-                p.productCategoryNameEnglish || 'Uncategorized'
-              }</div>
-              <div class="product-name">${p.name}</div>
-              <div class="product-price">€${p.startPrice}</div>
-              <button class="add-to-cart-btn" onclick="addToCart(${
-                p.productMasterId
-              }, '${p.name}')">Add to Basket</button>
-          </div>
-      </div>
-    `
-    )
-    .join('')
+    if (currentPage > totalPages) {
+        currentPage = 1;
+    }
+
+    // Slice array to extract only the chunks needed for the current view
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedItems = filtered.slice(startIndex, endIndex);
+
+    // 2. RENDER THE PRODUCT CARDS
+    grid.innerHTML = paginatedItems
+        .map(
+            p => `
+            <div class="product-card">
+                <img src="${p.productThumbnailUrl}" alt="${p.name}" class="product-image">
+                <div class="product-info">
+                    <div class="product-category">
+                        ${p.productCategoryNameEnglish || 'Uncategorized'}
+                    </div>
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-price">€${p.startPrice}</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(${p.productMasterId}, '${p.name.replace(/'/g, "\\'")}')">
+                        Add to Basket
+                    </button>
+                </div>
+            </div>
+            `
+        )
+        .join('');
+
+    // 3. RENDER THE PAGINATION BUTTONS
+    renderPaginationButtons(totalPages);
+}
+
+function renderPaginationButtons(totalPages) {
+    const paginationControls = document.getElementById('pagination-controls');
+    if (!paginationControls) return;
+    
+    // Hide controls completely if everything fits on a single page
+    if (totalPages <= 1) {
+        paginationControls.innerHTML = '';
+        return;
+    }
+
+    let buttonsHTML = '';
+
+    // 1. "Prev" Button Control
+    buttonsHTML += `
+        <button class="page-btn ctrl-btn" 
+                ${currentPage === 1 ? 'disabled' : ''} 
+                onclick="changePage(${currentPage - 1})">
+            &larr; Prev
+        </button>
+    `;
+
+    // Controls how many sibling buttons show around the current page
+    const positioningRange = 5; 
+
+    for (let i = 1; i <= totalPages; i++) {
+        // Always render the first page, the last page, and any page within our slider range
+        if (
+            i === 1 || 
+            i === totalPages || 
+            (i >= currentPage - positioningRange && i <= currentPage + positioningRange)
+        ) {
+            buttonsHTML += `
+                <button class="page-btn ${currentPage === i ? 'active' : ''}" 
+                        onclick="changePage(${i})">
+                    ${i}
+                </button>
+            `;
+        } 
+        // Render ellipses indicators if we are exactly on the boundary edge of a hidden block
+        else if (
+            i === currentPage - positioningRange - 1 || 
+            i === currentPage + positioningRange + 1
+        ) {
+            buttonsHTML += `<span class="pagination-separator">...</span>`;
+        }
+    }
+
+    // 3. "Next" Button Control
+    buttonsHTML += `
+        <button class="page-btn ctrl-btn" 
+                ${currentPage === totalPages ? 'disabled' : ''} 
+                onclick="changePage(${currentPage + 1})">
+            Next &rarr;
+        </button>
+    `;
+
+    paginationControls.innerHTML = buttonsHTML;
+}
+
+// Action Trigger when a page number or directional button gets clicked
+function changePage(pageNumber) {
+    currentPage = pageNumber;
+    renderProducts(); // Automatically pulls updated items from state values
+    
+    // Smoothly scroll user up to the product area title when changing pages
+    const title = document.getElementById('section-title');
+    if (title) title.scrollIntoView({ behavior: 'smooth' });
 }
 
 function addToCart (id, name) {
@@ -147,6 +223,9 @@ function updateCart (actionType = null, itemName = '') {
       showToast('warning', `${itemName} removed from cart`)
     return
   }
+  if (actionType === 'add' && itemName){
+      showToast('success', `${itemName} added to cart`)
+    }
 
   container.innerHTML = cart
     .map(

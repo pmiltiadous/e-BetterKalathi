@@ -13,9 +13,9 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <a href="#" class="logo">
                     <span>e-BetterKalathi</span>
-                </div>
+                </a>
                 <button class="cart-btn" onclick="toggleCart()">
                     Cart <span class="cart-badge" id="cart-count">0</span>
                 </button>
@@ -23,10 +23,22 @@
         </div>
     </header>
 
-    <!-- Categories -->
+    <!-- Hero Section -->
+    <section class="container">
+        <div class="hero">
+            <div class="hero-text">
+                <h2>Your Supermarket <span class="highlight">Simplified</span></h2>
+                <p>Track your cart items, compare prices across supermarkets, and save money.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="categories">
         <div class="container">
-            <div class="categories-scroll" id="categories"></div>
+            <div class="categories-wrapper">
+                <div class="categories-scroll" id="categories">
+                </div>
+            </div>
         </div>
     </section>
 
@@ -37,13 +49,14 @@
                 <h3 id="section-title">All Products</h3>
                 <p id="product-count">0 products available</p>
             </div>
-            <!-- Search Bar -->
-            <div class="search-bar" style="margin-bottom:1.5rem;">
+            <div class="search-bar">
                 <input type="text" id="product-search" placeholder="Search products..."
-                    style="width:100%; padding:0.75rem; border:1px solid hsl(var(--border)); border-radius:0.375rem; font-size:1rem;"
                     oninput="searchProducts(this.value)">
             </div>
+
             <div class="products-grid" id="products-grid"></div>
+
+            <div id="pagination-controls" class="pagination-container"></div>
         </div>
     </section>
 
@@ -63,10 +76,12 @@
         </div>
 
         <div class="cart-footer">
-            <label for="cart-town">Select your town:</label>
-            <select id="cart-town">
-                <option value="">Loading towns...</option>
-            </select>
+            <div class="town-selector-wrapper">
+                <label for="cart-town">Select your town:</label>
+                <select id="cart-town">
+                    <option value="">Loading towns...</option>
+                </select>
+            </div>
 
             <div class="cart-total">
                 <span>Starting from:</span><span id="cart-total">€0.00</span>
@@ -75,6 +90,7 @@
         </div>
     </div>
 
+    <!-- Loader -->
     <div id="loader" class="loader-overlay" style="display: none;">
         <div class="loader"></div>
     </div>
@@ -82,7 +98,7 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
-            <p>© 2025 PM. All rights reserved.</p>
+            <p>© 2026 PM. All rights reserved.</p>
         </div>
     </footer>
 

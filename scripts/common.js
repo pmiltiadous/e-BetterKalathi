@@ -1,29 +1,29 @@
 function showToast (type = 'info', message = '', duration = 2000) {
+  const neoBgColor = 
+    type === 'success' ? '#a3e635' :
+    type === 'warning' ? '#fde047' : 
+    type === 'error'   ? '#fb923c' : 
+    type === 'info'    ? '#f472b6' : 
+    '#ffffff';
+
   Swal.fire({
     toast: true,
-    position: 'top',
+    position: 'top-end', 
     icon: type,
     title: message,
     showConfirmButton: false,
     showCloseButton: true,
     timer: duration,
     timerProgressBar: true,
-    background: '#fff',
-    color: '#333',
-    iconColor:
-      type === 'warning'
-        ? '#fbbf24'
-        : type === 'success'
-        ? '#34d399'
-        : type === 'error'
-        ? '#f87171'
-        : type === 'info'
-        ? '#60a5fa'
-        : '#ccc',
-    width: '320px',
-    padding: '0.75rem 1rem',
+    background: neoBgColor,
+    color: '#000000',
+    iconColor: '#000000',
+    width: 'auto',
+    padding: '1rem 1.5rem',
     customClass: {
-      popup: 'shadow-lg rounded-md'
+      popup: 'neo-toast-popup',
+      timerProgressBar: 'neo-toast-progress',
+      closeButton: 'neo-toast-close'
     }
   })
 }
